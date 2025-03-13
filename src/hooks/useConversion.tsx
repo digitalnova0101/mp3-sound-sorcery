@@ -66,20 +66,33 @@ export const useConversion = () => {
   }, [toast]);
   
   const downloadResult = useCallback((result: ConversionResult) => {
-    // Create a download link
-    const a = document.createElement('a');
-    a.href = result.url;
-    a.download = result.filename;
-    
-    // Append to body, click, and remove
-    document.body.appendChild(a);
-    a.click();
-    
-    // Clean up
-    setTimeout(() => {
-      document.body.removeChild(a);
-    }, 100);
-  }, []);
+    try {
+      // Create a download link
+      const a = document.createElement('a');
+      a.href = result.url;
+      a.download = result.filename;
+      
+      // Append to body, click, and remove
+      document.body.appendChild(a);
+      a.click();
+      
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(a);
+      }, 100);
+      
+      toast({
+        title: "Download Started",
+        description: `Your file ${result.filename} is being downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Download Failed",
+        description: `There was an error downloading your file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
+    }
+  }, [toast]);
   
   const clearResult = useCallback(() => {
     if (state.result?.url) {

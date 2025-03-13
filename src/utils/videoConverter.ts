@@ -44,23 +44,12 @@ export const convertVideoToMP3 = async (
     );
   }
   
-  // Create a real audio blob that can be downloaded as an MP3
-  // For demo purposes, we're creating a silent MP3 file
-  // In a real app, this would be the actual converted audio from the video
+  // Instead of trying to create a valid MP3 from scratch with base64,
+  // we'll create a copy of the original video file but rename it to .mp3
+  // In a real implementation, you would convert the actual file format
   
-  // This is a base64-encoded minimal valid MP3 file (1 second of silence)
-  const silentMp3Base64 = 'SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADQADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD///////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAYAAAAAAAAAA0CS7JhJAAAAAAD/+1DEAAAF2l9prwxhILfL6z3PCEkFAT8AaI/HghhYfgJD4PAIDwdrB4P4Pfa3N3/d/3P8/93f7nf8F/8DwfBwEAgEAAYYShb+Gg7AAIHMlbEYnA8tVTvrXm67+XX/8uJuf/yVpQrSj/5c31JLwG3LWyh6TCx1SVmq/bRsZJ2kYzt0N7qCpKm2e////7oZ0MHaYSFIAABJgjQACX8djjgAAB9rI6U6UJGDiojI1GxhZCvFjoUxRzXELRUKgo0ShREDotFIiQEFihFAKCJlCJBIDgAJBAJBlCIAElKhDQhLFCJBBFKhDmUYQ4VCK4VIKlEwqQTMoQ5FGEOFhQhlCGhCWKFiJBUpKYQFKSmEUlZQhxMKmkuFio5sKnkwqQXCppeWFTi8sTXFiaw7nTr/+1LEIgAGbWF1tZeAINGs7zaykAEqcXlhc6WXOS5ycXONJXGkrjSVxpLnJxapOLVMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq';
-  
-  // Convert base64 to blob
-  const byteCharacters = atob(silentMp3Base64);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  const byteArray = new Uint8Array(byteNumbers);
-  
-  // Create audio blob with proper MIME type
-  const audioBlob = new Blob([byteArray], { type: 'audio/mpeg' });
+  // Create a copy of the original file but with an .mp3 extension
+  const audioBlob = file.slice(0, file.size, 'audio/mpeg');
   
   // Calculate simulated file size (in a real app, this would be the actual size)
   const simulatedSize = file.size * qualityMultiplier;
