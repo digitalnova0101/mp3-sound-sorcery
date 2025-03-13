@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { 
   convertVideoToMP3, 
@@ -65,12 +66,19 @@ export const useConversion = () => {
   }, [toast]);
   
   const downloadResult = useCallback((result: ConversionResult) => {
+    // Create a download link
     const a = document.createElement('a');
     a.href = result.url;
     a.download = result.filename;
+    
+    // Append to body, click, and remove
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(a);
+    }, 100);
   }, []);
   
   const clearResult = useCallback(() => {
